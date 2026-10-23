@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="../public/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Kalam:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../src/index.css" />
+    <title>Protótipo — Tarefas</title>
+    <style>
+      /* estilos só do protótipo, para separar os exemplos */
+      .proto { display: grid; gap: 1rem; justify-items: center; width: 100%; }
+      .proto + .proto { margin-top: 3.5rem; }
+      .proto__caption {
+        width: min(100%, 44rem);
+        margin: 0;
+        font-size: 0.9375rem;
+        color: var(--ink-soft);
+      }
+      .proto__caption code { font-size: 0.875rem; }
+    </style>
+  </head>
+  <body>
+    <!--
+      PROTÓTIPO ESTÁTICO (HTML + CSS, sem JavaScript)
+      Mostra todos os estados que o app em React vai precisar.
+      Os comentários indicam qual classe ou atributo muda em cada estado.
+    -->
+    <main class="app">
+
+      <!-- ===================================================== -->
+      <div class="proto">
+        <p class="proto__caption">
+          Lista com tarefas: normal, concluída, em edição e aguardando a API.
+        </p>
+
+        <section class="notebook" aria-labelledby="titulo-1">
+          <header class="notebook__header">
+            <h1 class="notebook__title" id="titulo-1">Tarefas</h1>
+            <p class="notebook__summary">2 de 5 concluídas</p>
+          </header>
+
+          <!-- Nova tarefa: título obrigatório + descrição opcional -->
+          <form class="task-form">
+            <span class="task-form__mark" aria-hidden="true">+</span>
+            <label class="visually-hidden" for="nova-titulo">Título da tarefa</label>
+            <input
+              id="nova-titulo"
+              name="titulo"
+              class="task-form__input"
+              type="text"
+              placeholder="O que precisa ser feito?"
+              autocomplete="off"
+              maxlength="255"
+              required
+            />
+            <label class="visually-hidden" for="nova-descricao">Descrição (opcional)</label>
+            <textarea
+              id="nova-descricao"
+              name="descricao"
+              class="task-form__details"
+              rows="1"
+              placeholder="Detalhes (opcional)"
+            ></textarea>
+            <button class="button button--primary" type="submit">Adicionar</button>
+          </form>
+
+          <ul class="task-list">
+            <!-- Tarefa com descrição -->
+            <li class="task">
+              <div class="task__check">
+                <input class="checkbox" type="checkbox" aria-label="Concluir: Criar a migration da tabela tarefas" />
+              </div>
+              <div class="task__body">
+                <span class="task__title">Criar a migration da tabela tarefas</span>
+                <p class="task__description">Campos: titulo (string), descricao (text, opcional) e concluida (boolean, padrão false).</p>
+              </div>
+              <div class="task__actions">
+                <button class="task-action" type="button">Editar</button>
+                <button class="task-action task-action--danger" type="button">Apagar</button>
+              </div>
+            </li>
+
+            <!-- Concluída: classe task--done + checkbox marcado; sem descrição, o <p> não aparece -->
+            <li class="task task--done">
+              <div class="task__check">
+                <input class="checkbox" type="checkbox" checked aria-label="Concluir: Testar a rota GET /api/tarefas" />
+              </div>
+              <div class="task__body">
+                <span class="task__title">Testar a rota GET /api/tarefas</span>
+              </div>
+              <div class="task__actions">
+                <button class="task-action" type="button">Editar</button>
+                <button class="task-action task-action--danger" type="button">Apagar</button>
+              </div>
+            </li>
+
+            <!-- Em edição: classe task--editing; o corpo vira um form com os dois campos -->
+            <li class="task task--editing">
+              <div class="task__check">
+                <input class="checkbox" type="checkbox" disabled aria-label="Concluir: Instalar o axios no front" />
+              </div>
+              <form class="task__edit">
+                <div class="task__fields">
+                  <label class="visually-hidden" for="editar-titulo-3">Título</label>
+                  <input id="editar-titulo-3" name="titulo" class="task__input" type="text" value="Instalar o axios no front-end" maxlength="255" required />
+                  <label class="visually-hidden" for="editar-descricao-3">Descrição</label>
+                  <textarea id="editar-descricao-3" name="descricao" class="task__input task__input--details" rows="2" placeholder="Detalhes (opcional)">npm install axios e criar a instância em src/services/api.js</textarea>
+                </div>
+                <div class="task__actions">
+                  <button class="task-action task-action--primary" type="submit">Salvar</button>
+                  <button class="task-action" type="button">Cancelar</button>
+                </div>
+              </form>
+            </li>
+
+            <!-- Aguardando a API (ex.: apagando): aria-busy="true" -->
+            <li class="task" aria-busy="true">
+              <div class="task__check">
+                <input class="checkbox" type="checkbox" aria-label="Concluir: Configurar o proxy do Vite" />
+              </div>
+              <div class="task__body">
+                <span class="task__title">Configurar o proxy do Vite</span>
+                <p class="task__description">Apontar o target para a porta do container Laravel.</p>
+              </div>
+              <div class="task__actions">
+                <button class="task-action" type="button">Editar</button>
+                <button class="task-action task-action--danger" type="button">Apagar</button>
+              </div>
+            </li>
+
+            <!-- Texto longo quebra a linha sem estourar o layout -->
+            <li class="task task--done">
+              <div class="task__check">
+                <input class="checkbox" type="checkbox" checked aria-label="Concluir: Revisar a lista de exercícios de Algoritmos" />
+              </div>
+              <div class="task__body">
+                <span class="task__title">Revisar a lista de exercícios de Algoritmos antes da prova</span>
+                <p class="task__description">Anotar as dúvidas para levar na monitoria de quinta-feira.
+Refazer os exercícios 4 e 7.</p>
+              </div>
+              <div class="task__actions">
+                <button class="task-action" type="button">Editar</button>
+                <button class="task-action task-action--danger" type="button">Apagar</button>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- ===================================================== -->
+      <div class="proto">
+        <p class="proto__caption">
+          Carregando: <code>.notice.notice--loading</code> no lugar da lista.
+        </p>
+
+        <section class="notebook" aria-labelledby="titulo-2">
+          <header class="notebook__header">
+            <h1 class="notebook__title" id="titulo-2">Tarefas</h1>
+          </header>
+          <div class="notice notice--loading" role="status">
+            <p>Carregando tarefas</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===================================================== -->
+      <div class="proto">
+        <p class="proto__caption">
+          Lista vazia: <code>.notice</code> logo abaixo do formulário.
+        </p>
+
+        <section class="notebook" aria-labelledby="titulo-3">
+          <header class="notebook__header">
+            <h1 class="notebook__title" id="titulo-3">Tarefas</h1>
+            <p class="notebook__summary">Nenhuma tarefa</p>
+          </header>
+          <form class="task-form">
+            <span class="task-form__mark" aria-hidden="true">+</span>
+            <label class="visually-hidden" for="nova-titulo-2">Título da tarefa</label>
+            <input id="nova-titulo-2" name="titulo" class="task-form__input" type="text" placeholder="O que precisa ser feito?" autocomplete="off" required />
+            <label class="visually-hidden" for="nova-descricao-2">Descrição (opcional)</label>
+            <textarea id="nova-descricao-2" name="descricao" class="task-form__details" rows="1" placeholder="Detalhes (opcional)"></textarea>
+            <button class="button button--primary" type="submit">Adicionar</button>
+          </form>
+          <div class="notice">
+            <p>A folha está em branco. Escreva a primeira tarefa no campo acima.</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===================================================== -->
+      <div class="proto">
+        <p class="proto__caption">
+          Erro: <code>.notice.notice--error</code> com <code>role="alert"</code> e botão para tentar de novo.
+        </p>
+
+        <section class="notebook" aria-labelledby="titulo-4">
+          <header class="notebook__header">
+            <h1 class="notebook__title" id="titulo-4">Tarefas</h1>
+          </header>
+          <div class="notice notice--error" role="alert">
+            <p><strong>Não foi possível carregar as tarefas.</strong> Confira se o container do Laravel está rodando.</p>
+            <button class="button button--danger" type="button">Tentar de novo</button>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </body>
+</html>
