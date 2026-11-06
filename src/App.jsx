@@ -2,11 +2,21 @@
 // O visual pronto (com todas as classes) está em /prototipo/index.html —
 // abra http://localhost:5173/prototipo/ com o `npm run dev` rodando.
 
+import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import { useTasks } from "./hooks/useTasks";
 
 export default function App() {
-  const { tasks, status, loadError, reload } = useTasks();
+  const {
+    tasks,
+    status,
+    loadError,
+    reload,
+    addTask,
+    toggleTask,
+    actionError,
+    clearActionError,
+  } = useTasks();
 
   return (
     <main className="app">
@@ -30,7 +40,29 @@ export default function App() {
           </div>
         )}
 
-        {status === "success" && <TaskList tasks={tasks} />}
+        {status === "success" && (
+          <>
+            <TaskForm onAdd={addTask} />
+            {actionError && (
+              <div className="notice notice--error" role="alert">
+                <p>{actionError}</p>
+                <button
+                  onClick={clearActionError}
+                  className="button button--danger"
+                >
+                  Fechar
+                </button>
+              </div>
+            )}
+            {tasks.length === 0 ? (
+              <div className="notice">
+                <p>Nenhuma tarefa cadastrada</p>
+              </div>
+            ) : (
+              <TaskList tasks={tasks} onToggle={toggleTask} />
+            )}
+          </>
+        )}
       </section>
     </main>
   );
